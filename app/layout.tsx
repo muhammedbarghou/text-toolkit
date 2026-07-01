@@ -4,6 +4,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import { AppToaster } from "@/components/app-toaster";
 import { SiteHeader } from "@/components/site-header";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import { getSiteUrl, SITE_NAME } from "@/lib/tools/site-config";
 
 import "./globals.css";
 
@@ -18,9 +19,16 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Text Toolkit — Free Online Text Tools",
+  metadataBase: new URL(getSiteUrl()),
+  title: {
+    default: `${SITE_NAME} — Free Online Text Tools`,
+    template: `%s | ${SITE_NAME}`,
+  },
   description:
     "A collection of free online text processing tools. Sort, convert, encode, generate, and transform text — all in your browser.",
+  alternates: {
+    canonical: "/",
+  },
 };
 
 export default function RootLayout({

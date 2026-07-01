@@ -12,13 +12,54 @@ export type ToolCategory =
   | "Random Generators"
   | "Web Scraping";
 
+export type ToolFaqItem = { question: string; answer: string };
+
+export type ToolExample = { before: string; after: string; label?: string };
+
+export type ToolSeoFields = {
+  longDescription: string;
+  example: ToolExample;
+  faq: ToolFaqItem[];
+  keywords?: string[];
+  seoTitle?: string;
+  relatedSlugs?: string[];
+};
+
+export type ToolMeta = {
+  slug: string;
+  name: string;
+  category: ToolCategory;
+  description: string;
+  seoTitle?: string;
+  keywords?: string[];
+  longDescription: string;
+  example: ToolExample;
+  faq: ToolFaqItem[];
+  requiresInput?: boolean;
+  inputCount?: 1 | 2;
+  outputMode?: "text" | "stats" | "diff";
+  supportsSwap?: boolean;
+  inputPlaceholder?: string;
+  relatedSlugs?: string[];
+};
+
+export type TransformFn = (input: string, options: Record<string, string | boolean | number>) => string;
+
+export type ToolRuntime = Pick<
+  ToolMeta,
+  "slug" | "requiresInput" | "inputCount" | "outputMode" | "supportsSwap" | "inputPlaceholder"
+> & {
+  options: OptionField[];
+  transform: TransformFn;
+};
+
 export type ToolConfig = {
   slug: string;
   name: string;
   category: ToolCategory;
   description: string;
   options: OptionField[];
-  transform: (input: string, options: Record<string, string | boolean | number>) => string;
+  transform: TransformFn;
   requiresInput?: boolean;
   inputCount?: 1 | 2;
   outputMode?: "text" | "stats" | "diff";
@@ -35,3 +76,6 @@ export const getDefaultOptions = (options: OptionField[]): OptionValues => {
   }
   return defaults;
 };
+
+export const categoryToAnchor = (category: ToolCategory): string =>
+  category.toLowerCase().replace(/\s+/g, "-").replace(/&/g, "and");

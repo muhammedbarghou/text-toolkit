@@ -10,10 +10,10 @@ import { ToolOptionsRenderer } from "@/components/tool-options-renderer";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
-import { getDefaultOptions, type ToolConfig } from "@/lib/tools/types";
+import { getDefaultOptions, type ToolRuntime } from "@/lib/tools/types";
 
 type DiffToolLayoutProps = {
-  tool: ToolConfig;
+  runtime: ToolRuntime;
 };
 
 const useDebouncedValue = <T,>(value: T, delay: number): T => {
@@ -71,12 +71,12 @@ const computeLineDiff = (textA: string, textB: string): DiffLine[] => {
   return result;
 };
 
-export const DiffToolLayout = ({ tool }: DiffToolLayoutProps) => {
-  const isDiffOutput = tool.outputMode === "diff";
+export const DiffToolLayout = ({ runtime }: DiffToolLayoutProps) => {
+  const isDiffOutput = runtime.outputMode === "diff";
 
   const [inputA, setInputA] = useState("");
   const [inputB, setInputB] = useState("");
-  const [options, setOptions] = useState(() => getDefaultOptions(tool.options));
+  const [options, setOptions] = useState(() => getDefaultOptions(runtime.options));
 
   const debouncedA = useDebouncedValue(inputA, 150);
   const debouncedB = useDebouncedValue(inputB, 150);
@@ -89,11 +89,11 @@ export const DiffToolLayout = ({ tool }: DiffToolLayoutProps) => {
 
   const output = useMemo(() => {
     try {
-      return tool.transform(combinedInput, debouncedOptions);
+      return runtime.transform(combinedInput, debouncedOptions);
     } catch {
       return "";
     }
-  }, [combinedInput, debouncedOptions, tool]);
+  }, [combinedInput, debouncedOptions, runtime]);
 
   const diffLines = useMemo(
     () => (isDiffOutput ? computeLineDiff(debouncedA, debouncedB) : []),
@@ -109,15 +109,10 @@ export const DiffToolLayout = ({ tool }: DiffToolLayoutProps) => {
     setInputB("");
   };
 
-  const downloadFilename = useMemo(() => `${tool.slug}.txt`, [tool.slug]);
+  const downloadFilename = useMemo(() => `${runtime.slug}.txt`, [runtime.slug]);
 
   return (
-    <div className="mx-auto flex w-full max-w-6xl flex-col gap-6">
-      <div>
-        <h1 className="text-2xl font-semibold tracking-tight">{tool.name}</h1>
-        <p className="mt-1 text-muted-foreground">{tool.description}</p>
-      </div>
-
+    <div className="flex flex-col gap-6">
       <div className="grid gap-6 lg:grid-cols-2">
         <Card>
           <CardHeader className="pb-3">
@@ -152,14 +147,14 @@ export const DiffToolLayout = ({ tool }: DiffToolLayoutProps) => {
         </Card>
       </div>
 
-      {tool.options.length > 0 && (
+      {runtime.options.length > 0 && (
         <Card>
           <CardHeader className="pb-3">
             <CardTitle className="text-base">Options</CardTitle>
           </CardHeader>
           <CardContent>
             <ToolOptionsRenderer
-              options={tool.options}
+              options={runtime.options}
               values={options}
               onChange={handleOptionChange}
             />
