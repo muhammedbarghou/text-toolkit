@@ -14,10 +14,16 @@ export const TextStatsBar = ({ text }: TextStatsBarProps) => {
   const { characters, words, lines } = getTextStats(text);
 
   return (
-    <div className="flex flex-wrap gap-x-4 gap-y-1 text-xs text-muted-foreground">
-      <span>{characters} characters</span>
-      <span>{words} words</span>
-      <span>{lines} lines</span>
+    <div className="mt-2 flex gap-4 font-mono text-xs text-muted-foreground">
+      <span>
+        Characters: <strong className="text-foreground">{characters}</strong>
+      </span>
+      <span>
+        Words: <strong className="text-foreground">{words}</strong>
+      </span>
+      <span>
+        Lines: <strong className="text-foreground">{lines}</strong>
+      </span>
     </div>
   );
 };

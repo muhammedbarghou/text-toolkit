@@ -62,14 +62,18 @@ export default async function ToolPage({ params }: ToolPageProps) {
   return (
     <>
       <ToolStructuredData tool={tool} />
-      <article className="mx-auto w-full max-w-6xl">
-        <ToolBreadcrumbs tool={tool} />
-        <header className="mb-8">
-          <h1 className="text-3xl font-semibold tracking-tight">{tool.name} – Free Online Tool</h1>
-          <p className="mt-2 max-w-3xl text-lg text-muted-foreground">{tool.description}</p>
-        </header>
+      <article className="mx-auto w-full max-w-6xl px-4 py-6">
+        <div className="mx-auto max-w-4xl">
+          <ToolBreadcrumbs tool={tool} />
+          <header className="mb-8">
+            <h1 className="mb-1 text-2xl font-bold text-foreground">
+              {tool.name} – Free Online Tool
+            </h1>
+            <p className="mb-8 text-sm text-muted-foreground">{tool.description}</p>
+          </header>
 
-        <ToolInteractive slug={slug} inputCount={tool.inputCount} />
+          <ToolInteractive slug={slug} inputCount={tool.inputCount} />
+        </div>
 
         <ToolLongDescription content={tool.longDescription} />
         <ToolExampleSection example={tool.example} />

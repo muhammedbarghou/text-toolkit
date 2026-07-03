@@ -29,7 +29,7 @@ export const CopyButton = ({ text, label = "Copy", disabled }: CopyButtonProps) 
   return (
     <Button
       type="button"
-      variant="outline"
+      variant="default"
       size="sm"
       onClick={handleCopy}
       disabled={disabled || !text}

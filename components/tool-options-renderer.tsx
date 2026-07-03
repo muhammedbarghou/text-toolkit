@@ -35,7 +35,9 @@ export const ToolOptionsRenderer = ({
         if (option.type === "select") {
           return (
             <div key={option.key} className="grid gap-2">
-              <Label htmlFor={id}>{option.label}</Label>
+              <Label htmlFor={id} className="mb-1 text-xs font-medium uppercase tracking-wide text-muted-foreground">
+                {option.label}
+              </Label>
               <Select
                 value={String(values[option.key] ?? option.default)}
                 onValueChange={(value) => onChange(option.key, value)}
@@ -58,7 +60,9 @@ export const ToolOptionsRenderer = ({
         if (option.type === "text") {
           return (
             <div key={option.key} className="grid gap-2">
-              <Label htmlFor={id}>{option.label}</Label>
+              <Label htmlFor={id} className="mb-1 text-xs font-medium uppercase tracking-wide text-muted-foreground">
+                {option.label}
+              </Label>
               <Input
                 id={id}
                 type="text"
@@ -73,7 +77,9 @@ export const ToolOptionsRenderer = ({
         if (option.type === "number") {
           return (
             <div key={option.key} className="grid gap-2">
-              <Label htmlFor={id}>{option.label}</Label>
+              <Label htmlFor={id} className="mb-1 text-xs font-medium uppercase tracking-wide text-muted-foreground">
+                {option.label}
+              </Label>
               <Input
                 id={id}
                 type="number"
@@ -93,7 +99,9 @@ export const ToolOptionsRenderer = ({
               checked={Boolean(values[option.key] ?? option.default)}
               onCheckedChange={(checked) => onChange(option.key, checked === true)}
             />
-            <Label htmlFor={id}>{option.label}</Label>
+            <Label htmlFor={id} className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
+              {option.label}
+            </Label>
           </div>
         );
       })}

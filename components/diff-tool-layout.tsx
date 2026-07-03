@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, type ReactNode } from "react";
 import { Trash2Icon } from "lucide-react";
 
 import { CopyButton } from "@/components/copy-button";
@@ -8,7 +8,6 @@ import { DownloadButton } from "@/components/download-button";
 import { TextStatsBar } from "@/components/text-stats-bar";
 import { ToolOptionsRenderer } from "@/components/tool-options-renderer";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
 import { getDefaultOptions, type ToolRuntime } from "@/lib/tools/types";
 
@@ -71,6 +70,12 @@ const computeLineDiff = (textA: string, textB: string): DiffLine[] => {
   return result;
 };
 
+const SectionLabel = ({ children }: { children: ReactNode }) => (
+  <p className="mb-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+    {children}
+  </p>
+);
+
 export const DiffToolLayout = ({ runtime }: DiffToolLayoutProps) => {
   const isDiffOutput = runtime.outputMode === "diff";
 
@@ -114,60 +119,42 @@ export const DiffToolLayout = ({ runtime }: DiffToolLayoutProps) => {
   return (
     <div className="flex flex-col gap-6">
       <div className="grid gap-6 lg:grid-cols-2">
-        <Card>
-          <CardHeader className="pb-3">
-            <CardTitle className="text-base">Input A</CardTitle>
-          </CardHeader>
-          <CardContent className="flex flex-col gap-2">
-            <Textarea
-              value={inputA}
-              onChange={(event) => setInputA(event.target.value)}
-              placeholder="Paste first text here..."
-              className="min-h-48 font-mono text-sm"
-              aria-label="Input A"
-            />
-            <TextStatsBar text={inputA} />
-          </CardContent>
-        </Card>
+        <section>
+          <SectionLabel>Input A</SectionLabel>
+          <Textarea
+            value={inputA}
+            onChange={(event) => setInputA(event.target.value)}
+            placeholder="Paste first text here..."
+            aria-label="Input A"
+          />
+          <TextStatsBar text={inputA} />
+        </section>
 
-        <Card>
-          <CardHeader className="pb-3">
-            <CardTitle className="text-base">Input B</CardTitle>
-          </CardHeader>
-          <CardContent className="flex flex-col gap-2">
-            <Textarea
-              value={inputB}
-              onChange={(event) => setInputB(event.target.value)}
-              placeholder="Paste second text here..."
-              className="min-h-48 font-mono text-sm"
-              aria-label="Input B"
-            />
-            <TextStatsBar text={inputB} />
-          </CardContent>
-        </Card>
+        <section>
+          <SectionLabel>Input B</SectionLabel>
+          <Textarea
+            value={inputB}
+            onChange={(event) => setInputB(event.target.value)}
+            placeholder="Paste second text here..."
+            aria-label="Input B"
+          />
+          <TextStatsBar text={inputB} />
+        </section>
       </div>
 
       {runtime.options.length > 0 && (
-        <Card>
-          <CardHeader className="pb-3">
-            <CardTitle className="text-base">Options</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <ToolOptionsRenderer
-              options={runtime.options}
-              values={options}
-              onChange={handleOptionChange}
-            />
-          </CardContent>
-        </Card>
+        <div className="mb-4 flex flex-wrap items-end gap-4 rounded border border-border bg-card p-4">
+          <ToolOptionsRenderer
+            options={runtime.options}
+            values={options}
+            onChange={handleOptionChange}
+          />
+        </div>
       )}
 
-      <Card>
-        <CardHeader className="flex flex-row items-start justify-between gap-4 pb-3">
-          <div>
-            <CardTitle className="text-base">Output</CardTitle>
-            <CardDescription>Updates automatically as you type.</CardDescription>
-          </div>
+      <section>
+        <div className="mb-2 flex flex-row items-start justify-between gap-4">
+          <SectionLabel>Output</SectionLabel>
           <div className="flex flex-wrap gap-2">
             <Button type="button" variant="outline" size="sm" onClick={handleClear}>
               <Trash2Icon />
@@ -180,44 +167,42 @@ export const DiffToolLayout = ({ runtime }: DiffToolLayoutProps) => {
               </>
             )}
           </div>
-        </CardHeader>
-        <CardContent>
-          {isDiffOutput ? (
-            <div className="min-h-48 overflow-auto rounded-lg border font-mono text-sm">
-              {diffLines.length === 0 ? (
-                <p className="p-4 text-muted-foreground">Diff will appear here...</p>
-              ) : (
-                diffLines.map((line, index) => (
-                  <div
-                    key={`${line.type}-${index}`}
-                    className={
-                      line.type === "added"
-                        ? "bg-green-500/10 px-3 py-0.5 text-green-700 dark:text-green-400"
-                        : line.type === "removed"
-                          ? "bg-red-500/10 px-3 py-0.5 text-red-700 dark:text-red-400"
-                          : "px-3 py-0.5"
-                    }
-                  >
-                    <span className="mr-2 select-none text-muted-foreground">
-                      {line.type === "added" ? "+" : line.type === "removed" ? "-" : " "}
-                    </span>
-                    {line.text || "\u00A0"}
-                  </div>
-                ))
-              )}
-            </div>
-          ) : (
-            <Textarea
-              value={output}
-              readOnly
-              placeholder="Output will appear here..."
-              className="min-h-48 font-mono text-sm"
-              aria-label="Output text"
-              aria-readonly
-            />
-          )}
-        </CardContent>
-      </Card>
+        </div>
+
+        {isDiffOutput ? (
+          <div className="min-h-[200px] overflow-auto rounded-md border border-border bg-card font-mono text-sm">
+            {diffLines.length === 0 ? (
+              <p className="p-4 text-muted-foreground">Diff will appear here...</p>
+            ) : (
+              diffLines.map((line, index) => (
+                <div
+                  key={`${line.type}-${index}`}
+                  className={
+                    line.type === "added"
+                      ? "bg-green-50 px-3 py-0.5 text-green-700"
+                      : line.type === "removed"
+                        ? "bg-red-50 px-3 py-0.5 text-red-600"
+                        : "px-3 py-0.5"
+                  }
+                >
+                  <span className="mr-2 select-none text-muted-foreground">
+                    {line.type === "added" ? "+" : line.type === "removed" ? "-" : " "}
+                  </span>
+                  {line.text || "\u00A0"}
+                </div>
+              ))
+            )}
+          </div>
+        ) : (
+          <Textarea
+            value={output}
+            readOnly
+            placeholder="Output will appear here..."
+            aria-label="Output text"
+            aria-readonly
+          />
+        )}
+      </section>
     </div>
   );
 };

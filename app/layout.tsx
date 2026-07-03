@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Inter, Space_Grotesk } from "next/font/google";
 
 import { AppToaster } from "@/components/app-toaster";
 import { SiteHeader } from "@/components/site-header";
@@ -8,14 +8,15 @@ import { getSiteUrl, SITE_NAME } from "@/lib/tools/site-config";
 
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const spaceGrotesk = Space_Grotesk({
   subsets: ["latin"],
+  variable: "--font-display",
+  weight: ["400", "500", "600", "700"],
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const inter = Inter({
   subsets: ["latin"],
+  variable: "--font-body",
 });
 
 export const metadata: Metadata = {
@@ -37,14 +38,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html
-      lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
-    >
-      <body className="flex min-h-full flex-col">
+    <html lang="en" className={`${spaceGrotesk.variable} ${inter.variable}`}>
+      <body className="flex min-h-screen flex-col bg-background text-foreground antialiased">
         <TooltipProvider>
           <SiteHeader />
-          <main className="flex-1 px-4 py-8">{children}</main>
+          <main className="flex-1">{children}</main>
           <AppToaster />
         </TooltipProvider>
       </body>
