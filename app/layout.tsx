@@ -5,6 +5,7 @@ import { AppToaster } from "@/components/app-toaster";
 import { SiteHeader } from "@/components/site-header";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { getSiteUrl, SITE_NAME } from "@/lib/tools/site-config";
+import { Analytics } from "@vercel/analytics/next"
 
 import "./globals.css";
 
@@ -45,6 +46,7 @@ export default function RootLayout({
           <main className="flex-1">{children}</main>
           <AppToaster />
         </TooltipProvider>
+        <Analytics />
       </body>
     </html>
   );
