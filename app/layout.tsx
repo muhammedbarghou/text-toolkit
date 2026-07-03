@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { Inter, Space_Grotesk } from "next/font/google";
 
 import { AppToaster } from "@/components/app-toaster";
-import { SiteHeader } from "@/components/site-header";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { getSiteUrl, SITE_NAME } from "@/lib/tools/site-config";
 import { Analytics } from "@vercel/analytics/next"
@@ -42,7 +41,6 @@ export default function RootLayout({
     <html lang="en" className={`${spaceGrotesk.variable} ${inter.variable}`}>
       <body className="flex min-h-screen flex-col bg-background text-foreground antialiased">
         <TooltipProvider>
-          <SiteHeader />
           <main className="flex-1">{children}</main>
           <AppToaster />
         </TooltipProvider>
